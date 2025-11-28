@@ -25,7 +25,8 @@ def is_useless_message(message: str) -> bool:
         "removed",
         "changed this group's icon",
         "https",
-        "this message was deleted"
+        "this message was deleted",
+        "this message"
     ]
     
     if any(term in message for term in ignored_terms):
