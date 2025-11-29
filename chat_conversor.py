@@ -26,14 +26,18 @@ def is_useless_message(message: str) -> bool:
         "changed this group's icon",
         "https",
         "this message was deleted",
-        "this message"
+        "This message",
+        "You deleted this message",
+        "changed this group's settings",
+        "joined using this group's invite link",
+        "VINIMUNEWS"
     ]
     
     if any(term in message for term in ignored_terms):
         return True
 
     if not message.startswith("["):
-        pass 
+        return True 
 
     return False
 
