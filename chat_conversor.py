@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import demoji
-import model
+
 df = pd.DataFrame()
 
 def is_useless_message(message: str) -> bool:
@@ -30,7 +30,8 @@ def is_useless_message(message: str) -> bool:
         "You deleted this message",
         "changed this group's settings",
         "joined using this group's invite link",
-        "VINIMUNEWS"
+        "VINIMUNEWS",
+        "JRMUNEWS"
     ]
     
     if any(term in message for term in ignored_terms):
