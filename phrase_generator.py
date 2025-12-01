@@ -1,7 +1,7 @@
 import random
 import utils
 
-def generate_story(markov_model, limit=100, start='my god', top_k=10):
+def generate_story(markov_model, limit=100, start='my god', top_k=5):
     n = 0
     curr_state = start
     story = curr_state + " "
@@ -38,41 +38,36 @@ def generate_story(markov_model, limit=100, start='my god', top_k=10):
     return story
 
 
-def generate_hybrid_story(markov_model, limit=100, start='my god', top_k=20):
+def generate_hybrid_story(markov_model, limit=100, start='my god', top_k=10):
+    start = random.choice(list(markov_model.keys()))
     story_words = start.split() # Transforma a string inicial em lista
     n = 0
     last_transition_size = 0
     while n < limit:
-        last_four_words = " ".join(story_words[-4:])
-        last_tree_words = " ".join(story_words[-3:])
+        last_three_words = " ".join(story_words[-3:])
         last_two_words = " ".join(story_words[-2:])
         last_one_word = story_words[-1]
 
         transitions = None
         # LÓGICA DE BACKOFF:
-        print("iteracao:",n)
+        # print("iteracao:",n)
 
-        if last_four_words in markov_model:
-            if last_transition_size!=1:
-                transitions= markov_model[last_four_words]
-                utils.show_transition_info(transitions,last_four_words)
-                
-        if last_tree_words in markov_model and transitions == None and last_transition_size!=1:
-            transitions = markov_model[last_tree_words]
-            utils.show_transition_info(transitions,last_tree_words)
-            
+        if last_three_words in markov_model and last_transition_size!=1:
+            transitions = markov_model[last_three_words]
+            # utils.show_transition_info(transitions,last_three_words)
+  
         # 1. Tenta achar a chave de 2 palavras
-        if last_two_words in markov_model and transitions == None:
+        elif last_two_words in markov_model:
             transitions = markov_model[last_two_words]
-            utils.show_transition_info(transitions,last_two_words)
+            # utils.show_transition_info(transitions,last_two_words)
 
         # 2. Se falhar, tenta achar a chave de 1 palavra
-        if last_one_word in markov_model and transitions == None:
+        elif last_one_word in markov_model:
             transitions = markov_model[last_one_word]
-            utils.show_transition_info(transitions,last_one_word)
+            # utils.show_transition_info(transitions,last_one_word)
 
         # 3. Se falhar tudo, escolhe uma palavra aleatória do modelo para 'destravar'
-        if transitions == None:
+        else:
             # print("chegou num final sem sentido")
             transitions = markov_model[random.choice(list(markov_model.keys()))]
 
