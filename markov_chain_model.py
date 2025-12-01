@@ -33,7 +33,7 @@ def make_markov_model(cleaned_stories, n_gram=2):
         
     return markov_model
 
-def make_hybrid_markov_model(cleaned_stories, max_gram=4):
+def make_hybrid_markov_model(cleaned_stories, max_gram=4,target="generic"):
     markov_model = {}
 
     # Vamos iterar de 1 até max_gram (ou seja, aprende n=1 e n=2)
@@ -60,11 +60,12 @@ def make_hybrid_markov_model(cleaned_stories, max_gram=4):
             markov_model[curr_state][state] = count / total
             
     # Supondo que 'markov_model' é o seu dicionário treinado
-    with open('modelo_markov.json', 'w', encoding='utf-8') as f:
+    with open(f'modelo_markov_{target}.json', 'w', encoding='utf-8') as f:
         # ensure_ascii=False garante que acentos fiquem legíveis (ex: 'não' em vez de '\u00e3o')
         json.dump(markov_model, f, ensure_ascii=False, indent=4)
 
-    print("Modelo salvo em modelo_markov.json")
+    print(f"Modelo salvo em modelo_markov_{target}.json")
+    
     return markov_model
 
 def load_model_from_json(fileName:str):
