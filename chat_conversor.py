@@ -71,6 +71,7 @@ def parse_file(text_file):
 
 
 def convertChatToCsv(filePath:str):
+    print("Convertendo chat para CSV...")
     basicList = parse_file(filePath)
     df['authors'] = basicList[0]
     df['messages'] = basicList[1]
@@ -79,4 +80,5 @@ def convertChatToCsv(filePath:str):
     df['messages'] = df['messages'].str.replace(r'@\d+', '', regex=True)
     newFilePath = filePath.replace(".txt","")+".csv"
     df.to_csv(newFilePath,encoding="utf-16")
+    print(f"Chat convertido e salvo em {newFilePath}")
 
