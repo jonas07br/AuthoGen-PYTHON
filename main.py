@@ -1,51 +1,32 @@
 import chat_conversor
 import pandas as pd
-import re
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import nltk
-import model
-import random
+import utils
+import markov_chain_model
+import phrase_generator
+import naive_bayes_model
 
-import random
 
-def generate_story(markov_model, limit=100, start='my god'):
-    n = 0
-    curr_state = start
-    next_state = None
-    story = ""
-    story+=curr_state+" "
-    while n<limit:
-        next_state = random.choices(list(markov_model[curr_state].keys()),
-                                    list(markov_model[curr_state].values()))
-        
-        curr_state = next_state[0]
-        story+=curr_state+" "
-        n+=1
-    return story
-
-def clean_txt(txt):
-    cleaned_txt = []
-    for line in txt:
-        line = line.lower()
-        line = re.sub(r"[,.\"\'!@#$%^&*(){}?/;`~:<>+=-\\]", "", line)
-        tokens = word_tokenize(line)
-        words = [word for word in tokens if word.isalpha()]
-        cleaned_txt+=words
-    return cleaned_txt
 
 # chat_conversor.convertChatToCsv('_chat.txt')
 
+# def showPhrase(start:str):
+#     print(phrase_generator.generate_hybrid_story(hybrid_markov,limit=10,start=start))
+    
 gplaysDf = pd.read_csv("_chat.csv",encoding="utf-16")
 
-zangadoFilter = gplaysDf['authors'] == 'gabriel bocão'
+targets = ['Spot','Antony']
+markov_models = {}
+for target in targets:
+    cleaned_mgs = utils.process_df_msgs(gplaysDf,target,8)
+    markov_models[target] = markov_chain_model.make_hybrid_markov_model(cleaned_mgs,max_gram=3,target=target)
+    print(f"Modelo Markov para {target} criado.")
 
-zangadoMsgs = gplaysDf.loc[zangadoFilter,'messages']
-
-cleaned_txt = clean_txt(zangadoMsgs.tolist())
-
-markov_model = model.make_markov_model(cleaned_txt,n_gram=1)
-
-for i in range(20):
-    print(str(i)+". ", generate_story(markov_model, start="eu quero", limit=10))
-
+nbModel,vectorizer = naive_bayes_model.make_naive_bayes_model(targets,gplaysDf,minLength=6)
+print("Modelo Naive Bayes criado.")
+while True:
+    user_input = input("Digite uma frase: ")
+    user_input_vectorized = vectorizer.transform([user_input])
+    predicted_author = nbModel.predict(user_input_vectorized)[0]
+    print(f"Autor previsto: {predicted_author}")
+    print("Frase gerada pelo modelo Markov:")
+    print(phrase_generator.generate_hybrid_story(markov_models[predicted_author],limit=10))

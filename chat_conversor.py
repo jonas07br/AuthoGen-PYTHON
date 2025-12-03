@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import demoji
-import model
+
 df = pd.DataFrame()
 
 def is_useless_message(message: str) -> bool:
@@ -25,14 +25,20 @@ def is_useless_message(message: str) -> bool:
         "removed",
         "changed this group's icon",
         "https",
-        "this message was deleted"
+        "this message was deleted",
+        "This message",
+        "You deleted this message",
+        "changed this group's settings",
+        "joined using this group's invite link",
+        "VINIMUNEWS",
+        "JRMUNEWS"
     ]
     
     if any(term in message for term in ignored_terms):
         return True
 
     if not message.startswith("["):
-        pass 
+        return True 
 
     return False
 
@@ -65,6 +71,7 @@ def parse_file(text_file):
 
 
 def convertChatToCsv(filePath:str):
+    print("Convertendo chat para CSV...")
     basicList = parse_file(filePath)
     df['authors'] = basicList[0]
     df['messages'] = basicList[1]
@@ -73,4 +80,5 @@ def convertChatToCsv(filePath:str):
     df['messages'] = df['messages'].str.replace(r'@\d+', '', regex=True)
     newFilePath = filePath.replace(".txt","")+".csv"
     df.to_csv(newFilePath,encoding="utf-16")
+    print(f"Chat convertido e salvo em {newFilePath}")
 
