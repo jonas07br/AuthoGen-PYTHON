@@ -1,62 +1,73 @@
-# IA-GPLAYS - Gerador de Texto com IA
+# AuthoGen (Python)
 
-## 📋 Resumo
+**Disciplina:** Introdução à Inteligência Artificial  
+**Semestre:** 2025.2  
+**Professor:** [Andre Luis Fonseca Faustino]  
+**Turma:** [T04]
 
-Sistema híbrido de geração de texto que combina **Cadeias de Markov** e **Naive Bayes** para identificar autores e gerar frases no estilo de diferentes pessoas a partir de conversas do WhatsApp.
+## Integrantes do Grupo
+- Jonas Rafael
+- Matheus Gabriel
+- Gabriel Guilherme
 
-## 🎯 Funcionalidades
+**Descrição do Projeto**
+- **Resumo:** Repositório com ferramentas para converter chats, treinar modelos de autoria (Naive Bayes) e gerar frases/trechos com modelos de Markov híbridos. O objetivo é analisar conversas (chat logs) e gerar frases no estilo dos participantes identificados.
+- **Principais componentes:** processamento/conversão de chat (`chat_conversor.py`), pré-processamento (`utils.py`), modelos de Markov (`markov_chain_model.py`), classificador Naive Bayes (`naive_bayes_model.py`) e gerador de frases (`phrase_generator.py`). Há também um `main.py` que demonstra um fluxo interativo (prever autor e gerar frase).
 
-- **Identificação de Autores**: Classifica frases usando Naive Bayes com TF-IDF
-- **Geração de Texto**: Cria frases no estilo de autores específicos usando Cadeias de Markov híbridas (n-gramas variáveis)
-- **Processamento de Chat**: Converte conversas do WhatsApp em datasets estruturados
+**Dependências principais (detectadas no código)**
+- `pandas`, `numpy`, `nltk`, `demoji`, `scikit-learn`
 
-## 🚀 Como Usar
+## Guia de Instalação e Execução
 
-### 1. Instalar Dependências
+**1. Pré-requisitos**
+- Clone o repositório
+- Instale o Python 3.8+.
+- Recomendo criar um ambiente virtual antes de instalar dependências.
+
 ```bash
+git clone https://github.com/jonas07br/AuthoGen-PYTHON.git
+cd AuthoGen-PYTHON
+# macOS / zsh
+python3 -m venv venv
+source venv/bin/activate
+
 pip install -r requirements.txt
+
+# Instalação manual
+pip install pandas numpy nltk demoji scikit-learn
 ```
 
-### 2. Configurar NLTK
-```python
-import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
+**2. Baixar dados do NLTK (necessário para tokenização/stopwords)**
+
+```bash
+python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 ```
 
-### 3. Preparar Dados
-- Exporte uma conversa do WhatsApp como `_chat.txt`
-- Execute a conversão (se necessário):
-```python
-import chat_conversor
-chat_conversor.convertChatToCsv('_chat.txt')
+**3. Preparar o dataset de chat**
+- Se você tem um arquivo de chat em texto (ex.: `_chat01-12-2025.txt`), converta para CSV com a função do módulo `chat_conversor`.
+
+```bash
+python -c "import chat_conversor; chat_conversor.convertChatToCsv('_chat01-12-2025.txt')"
+# Isso gera `_chat01-12-2025.csv` (encoding UTF-16) usado por `main.py`.
 ```
 
-### 4. Executar
+**4. Executar o fluxo principal (exemplo)**
+- O `main.py` carrega um CSV de chat, cria modelos Markov por autor e treina um Naive Bayes para prever autores.
+
 ```bash
 python main.py
 ```
 
-## 🔧 Estrutura do Projeto
+Durante a execução interativa, digite frases para o classificador prever o autor e para o gerador Markov produzir uma frase no estilo do autor previsto.
 
-- `main.py` - Ponto de entrada principal
-- `naive_bayes_model.py` - Classificador de autores
-- `markov_chain_model.py` - Modelo de geração de texto
-- `phrase_generator.py` - Gerador de frases com backoff híbrido
-- `chat_conversor.py` - Conversor WhatsApp → CSV
-- `utils.py` - Funções de limpeza e processamento de texto
+## Estrutura de arquivos (resumo)
+- `chat_conversor.py`: converte chat .txt em .csv
+- `utils.py`: pré-processamento e funções utilitárias (usa NLTK)
+- `markov_chain_model.py`: construção de modelos Markov híbridos
+- `naive_bayes_model.py`: treino e validação do classificador
+- `phrase_generator.py`: geração de frases a partir dos modelos
+- `main.py`: exemplo de execução / fluxo interativo
+- modelos JSON: `modelo_markov_*.json` — exemplos de modelos salvos
 
-## 📊 Fluxo de Funcionamento
-
-1. Usuário digita uma frase
-2. Naive Bayes identifica o autor mais provável
-3. Cadeia de Markov do autor gera uma resposta no seu estilo
-
-## 🧪 Modelos
-
-- **Naive Bayes**: TF-IDF com GridSearch (alpha otimizado)
-- **Markov Híbrido**: Suporta n-gramas de 1 a 3 palavras com backoff inteligente
-
----
-
-**Autores**: Projeto desenvolvido para análise de IA com dados do WhatsApp
+## Referências
+- Ferramentas e libs usadas: `pandas`, `numpy`, `nltk`, `scikit-learn`, `demoji`.
