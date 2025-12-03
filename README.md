@@ -6,9 +6,9 @@
 **Turma:** [T04]
 
 ## Integrantes do Grupo
-- Jonas Rafael
-- Matheus Gabriel
-- Gabriel Guilherme
+- Jonas Rafael Silva Cavalcanti - 20230054378
+- Matheus Gabriel Souto de Lira Freitas - 20230054930
+- Gabriel Guilherme Carvalho Viana - 20230042250 
 
 **Descrição do Projeto**
 - **Resumo:** Repositório com ferramentas para converter chats, treinar modelos de autoria (Naive Bayes) e gerar frases/trechos com modelos de Markov híbridos. O objetivo é analisar conversas (chat logs) e gerar frases no estilo dos participantes identificados.
