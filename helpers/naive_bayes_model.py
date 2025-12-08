@@ -7,15 +7,14 @@ from sklearn.model_selection import GridSearchCV
 import pandas as pd
 
 
-def make_naive_bayes_model(targets,df,minLength=3):
+def make_naive_bayes_model(targets,df,path,minLength=3):
     vectorizer = TfidfVectorizer(ngram_range=(1, 2),max_df=0.9)
-    df = pd.read_csv("_chat.csv",encoding="utf-16")
+    df = pd.read_csv(path,encoding="utf-16")
     df = df[df['authors'].isin(targets)]
     df = df[df['messages'].astype(str).str.split().str.len() >= minLength]
     print(df['authors'].value_counts(normalize=True))
     X = vectorizer.fit_transform(df['messages']) 
     y = df['authors']
-
 
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=112, stratify=y)
 

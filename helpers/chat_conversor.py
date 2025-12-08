@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import demoji
+from typing import List
 
 df = pd.DataFrame()
 
@@ -81,4 +82,40 @@ def convertChatToCsv(filePath:str):
     newFilePath = filePath.replace(".txt","")+".csv"
     df.to_csv(newFilePath,encoding="utf-16")
     print(f"Chat convertido e salvo em {newFilePath}")
+
+def get_contacts_from_csv(csv_path: str) -> List[str]:
+    encodings = ['utf-16', 'utf-8', 'latin1']
+    last_exception = None
+    for enc in encodings:
+        try:
+            df_local = pd.read_csv(csv_path, encoding=enc)
+            break
+        except Exception as e:
+            last_exception = e
+    else:
+        raise last_exception
+
+    if 'authors' not in df_local.columns:
+        possible = [c for c in df_local.columns if 'author' in c.lower() or 'authors' in c.lower() or 'autor' in c.lower()]
+        if possible:
+            authors_series = df_local[possible[0]]
+        else:
+            return []
+
+    else:
+        authors_series = df_local['authors']
+
+    authors_series = authors_series.fillna('').astype(str).str.strip()
+
+    # preservar ordem de primeira aparição
+    seen = set()
+    unique_authors = []
+    for name in authors_series:
+        if name == '':
+            continue
+        if name not in seen:
+            seen.add(name)
+            unique_authors.append(name)
+
+    return unique_authors
 

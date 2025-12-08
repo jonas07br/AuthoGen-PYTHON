@@ -1,0 +1,7 @@
+venv
+_chat.txt
+_chat.csv
+markov/modelo_markov_*.json
+data/*.csv
+data/*.txt
+__pycache__/
