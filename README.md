@@ -40,14 +40,14 @@ pip install pandas numpy nltk demoji scikit-learn
 **2. Baixar dados do NLTK (necessário para tokenização/stopwords)**
 
 ```bash
-python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords')"
 ```
 
 **3. Preparar o dataset de chat**
 - Se você tem um arquivo de chat em texto (ex.: `_chat01-12-2025.txt`), converta para CSV com a função do módulo `chat_conversor`.
 
 ```bash
-python -c "import chat_conversor; chat_conversor.convertChatToCsv('_chat01-12-2025.txt')"
+python -c "from helpers import chat_conversor; chat_conversor.convertChatToCsv('data/_chat.txt')"
 # Isso gera `_chat01-12-2025.csv` (encoding UTF-16) usado por `main.py`.
 ```
 

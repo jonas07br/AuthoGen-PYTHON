@@ -1,5 +1,4 @@
 import random
-import utils
 
 def generate_story(markov_model, limit=100, start='my god', top_k=5):
     n = 0
