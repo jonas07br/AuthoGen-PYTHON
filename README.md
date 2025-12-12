@@ -45,6 +45,7 @@ python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk
 
 **3. Preparar o dataset de chat**
 - Se você tem um arquivo de chat em texto (ex.: `_chat01-12-2025.txt`), converta para CSV com a função do módulo `chat_conversor`.
+- Existe um arquivo com conversas simuladas para testes simples ( `chat-fake.csv`)
 
 ```bash
 python -c "from helpers import chat_conversor; chat_conversor.convertChatToCsv('data/_chat.txt')"
